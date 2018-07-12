@@ -1,4 +1,4 @@
 #!/bin/bash
 
-python ./file_merger.py merge
-python ./index_verifier.py check
+pipenv run python ./file_merger.py merge
+pipenv run python ./index_verifier.py check

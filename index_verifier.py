@@ -133,6 +133,6 @@ def build_email_message(documents):
 
 
 if __name__ == "__main__":
-    logging.config.fileConfig(config.LOG_PATH)
+    logging.config.fileConfig(config.LOG_CONFIG_PATH)
     logger = logging.getLogger(os.path.basename(__file__))
     cli()

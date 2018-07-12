@@ -59,14 +59,41 @@ def convert_files(convert_path, tif_files, properties_files):
     clean_tif_files = [os.path.basename(x) for x in tif_files]
     tif_filenames = get_unique_filenames_without_pages(clean_tif_files)
     for tif in tif_filenames:
-        generate_xml(properties_files, tif)
-        docs_pattern = f'{tif}_*.tif'
-        new_filename = f'{config.OCR_FOLDER_PATH}/{tif}.pdf'
-        cmd = [convert_path, docs_pattern, new_filename]
-        subprocess.call(cmd, cwd=config.MFP_FOLDER_PATH, shell=False)
+        props = get_props(properties_files, tif)
+        page_count = get_current_page_count(clean_tif_files, tif)
+
+        if not props or page_count != int(props[1]['NumPages']):
+            r = re.compile(f'.*{tif}_[0-9]*.tif')
+            tif_files = [x for x in tif_files if not r.match(x)]
+
+            if props:
+                properties_path = props[0]
+                r = re.compile(properties_path)
+                properties_files = [x for x in properties_files if
+                                    not r.match(x)]
+        else:
+            generate_xml(properties_files, tif)
+            docs_pattern = f'{tif}_*.tif'
+            new_filename = f'{config.OCR_FOLDER_PATH}/{tif}.pdf'
+            cmd = [convert_path, docs_pattern, new_filename]
+            subprocess.call(cmd, cwd=config.MFP_FOLDER_PATH, shell=False)
 
     delete_files(tif_files)
     delete_files(properties_files)
+
+
+def get_current_page_count(docs, name):
+    r = re.compile(f'{name}_[0-9]*.tif')
+    result = list(filter(r.match, docs))
+    return len(result)
+
+
+def get_props(properties_files, name):
+    for properties_file in properties_files:
+        props = load_properties(properties_file)
+        if props['PageFilenameBase'] == name:
+            return properties_file, props
+    return None
 
 
 def generate_xml(properties_files, name):
@@ -78,10 +105,6 @@ def generate_xml(properties_files, name):
             filename = f'{config.OCR_FOLDER_PATH}/{name}.xml'
             write_file(filename, dom.toprettyxml())
             return
-
-    exception_msg = 'Missing properties for file {}'.format(name)
-    logger.error(exception_msg)
-    raise Exception(exception_msg)
 
 
 def write_file(filename, content):
@@ -127,6 +150,6 @@ def load_properties(filepath, sep='=', comment_char='#'):
 
 
 if __name__ == "__main__":
-    logging.config.fileConfig(config.LOG_PATH)
+    logging.config.fileConfig(config.LOG_CONFIG_PATH)
     logger = logging.getLogger(os.path.basename(__file__))
     cli()

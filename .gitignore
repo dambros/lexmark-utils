@@ -103,4 +103,7 @@ venv.bak/
 # mypy
 .mypy_cache/
 
+# local files
 Pipfile.lock
+utils.log
+db

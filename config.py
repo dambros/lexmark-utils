@@ -1,5 +1,5 @@
 #general
-LOG_PATH = './res/configs/logging.ini'
+LOG_CONFIG_PATH = './res/configs/logging.ini'
 
 #index_verifier.py
 SEARCH_WORD_PATH = './res/configs/search_words'
@@ -11,7 +11,7 @@ COLETA = 'coleta003'
 SMTP_ADDRESS = 'smtp.gmail.com'
 SMTP_PORT = 465
 SMTP_USER = 'notification@dataeasy.com.br'
-SMTP_PASSWORD = ''
+SMTP_PASSWORD = 'd4t434sy#$1234'
 RECIPIENT_LIST = ['dambros@gmail.com', 'mario.dambros@dataeasy.com.br']
 
 #file_merger.py
