@@ -99,6 +99,9 @@ def send_notification(documents):
 
 def build_email_message(documents):
     li_pattern = '<li><a target="_blank" href="{}">{}</a></li>'
+    all_results_pattern = '/spa/#/search/{coleta};q={' \
+                          'query};sr=ne_Relev%C3%A2nciass_or_DESCss_te_score;ss=false;sm=true;pc' \
+                          '=true;rs=10;sg=true;st=0;cq=false'
 
     with open('./res/templates/list.html') as l, open(
             './res/templates/template.html') as t:
@@ -121,8 +124,12 @@ def build_email_message(documents):
                     break
 
         li_str = ''.join(li)
+        all_results = config.ES_BASE_URL + all_results_pattern.format(
+            coleta=config.COLETA, query=encoded_query
+        )
         li_templates.append(
-            list_template.format(query=query, link_list=li_str))
+            list_template.format(query=query, link_list=li_str,
+                                 all_results=all_results))
 
     lists = ''.join(li_templates)
     return template.format(query_list=lists)
