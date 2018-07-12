@@ -88,13 +88,13 @@ def check_message_already_sent(value):
 
 
 def send_notification(documents):
-    return requests.post(
+    requests.post(
         config.MAILGUN_API,
         auth=('api', config.MAILGUN_API_KEY),
         data={'from': config.MAILGUN_FROM,
               'to': config.RECIPIENT_LIST,
               'subject': 'Novas entradas encontradas!',
-              'text': build_email_message(documents)})
+              'html': build_email_message(documents)})
 
 
 def build_email_message(documents):
