@@ -1,3 +1,5 @@
+# -*- coding: utf-8 -*-
+
 import logging.config
 import os
 import urllib.parse
@@ -5,7 +7,6 @@ from collections import defaultdict
 
 import click
 import requests
-import yagmail
 
 import config
 
@@ -87,18 +88,13 @@ def check_message_already_sent(value):
 
 
 def send_notification(documents):
-    yag = yagmail.SMTP(
-        user=config.SMTP_USER,
-        password=config.SMTP_PASSWORD,
-        host=config.SMTP_ADDRESS,
-        port=config.SMTP_PORT
-    )
-
-    yag.send(
-        to=config.RECIPIENT_LIST,
-        subject='Novas entradas encontradas!',
-        contents=build_email_message(documents)
-    )
+    return requests.post(
+        config.MAILGUN_API,
+        auth=('api', config.MAILGUN_API_KEY),
+        data={'from': config.MAILGUN_FROM,
+              'to': config.RECIPIENT_LIST,
+              'subject': 'Novas entradas encontradas!',
+              'text': build_email_message(documents)})
 
 
 def build_email_message(documents):

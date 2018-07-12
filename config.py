@@ -8,10 +8,9 @@ ES_BASE_URL = 'https://demo.easysearch.com.br/easysearch'
 COLETA = 'coleta003'
 
 #Email
-SMTP_ADDRESS = 'smtp.gmail.com'
-SMTP_PORT = 465
-SMTP_USER = 'notification@dataeasy.com.br'
-SMTP_PASSWORD = 'd4t434sy#$1234'
+MAILGUN_API = 'https://api.mailgun.net/v3/dataeasy.com.br'
+MAILGUN_API_KEY = 'key-d7905449a049b6e975ac53720f445fbf'
+MAILGUN_FROM = 'Notificação <mailgun@dataeasy.com.br>'
 RECIPIENT_LIST = ['dambros@gmail.com', 'mario.dambros@dataeasy.com.br']
 
 #file_merger.py
